@@ -23,12 +23,15 @@ export default function Home() {
       { role: 'user', content: message }
     ])
 
-    let finalContent = message + "Here is some extra information: ";
-    for (let i = 0; i < listOfLearn.length; i++) {
-      if (i === listOfLearn.length - 1) finalContent += listOfLearn[i] + ".";
-      else finalContent += listOfLearn[i] + ", ";
+    let finalContent = message;
+    if (listOfLearn.length > 0) {
+      finalContent +=  " Here is some extra information: ";
+      for (let i = 0; i < listOfLearn.length; i++) {
+        if (i === listOfLearn.length - 1) finalContent += listOfLearn[i] + ".";
+        else finalContent += listOfLearn[i] + ", ";
+      }
+      //finalContent += " You can completely ignore these extra informations if the question is not related to these, and answer like usual."
     }
-
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -56,6 +59,7 @@ export default function Home() {
         { role: 'assistant', content: "I'm sorry, but I encountered an error. Please try again later." },
       ])
     }
+    console.log(finalContent);
   }
 
   const messagesEndRef = useRef(null)
