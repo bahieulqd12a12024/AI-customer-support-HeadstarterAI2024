@@ -24,10 +24,38 @@ export default function Home() {
     ])
 
     let finalContent = message;
-    if (listOfLearn.length > 0) {
+    let finalListOfLearn = [];
+    if (listOfLearn.length>0) {
+    try {
+      // Call the API with a POST request
+      const responseOfInfo = await fetch('/api/hehe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ extraInfo: listOfLearn, userQuestion: message}), // Send the user's question in the request body
+      });
+      console.log(responseOfInfo);
+      // if (!responseOfInfo.ok) {
+      //   throw new Error(`Error: ${responseOfInfo.status}`);
+      // }
+
+  
+
+      const data = await responseOfInfo.json(); // Parse the JSON response
+      console.log(data);
+      finalListOfLearn = data.response;// Update state with the chatbot's response
+      console.log(finalListOfLearn);
+    } catch (error) {
+      console.error('Failed to fetch:', error);
+      finalListOfLearn = [];
+    }
+  }
+
+    if (finalListOfLearn.length > 0) {
       finalContent +=  " Here is some extra information: ";
-      for (let i = 0; i < listOfLearn.length; i++) {
-        if (i === listOfLearn.length - 1) finalContent += listOfLearn[i] + ".";
+      for (let i = 0; i < finalListOfLearn.length; i++) {
+        if (i === finalListOfLearn.length - 1) finalContent += finalListOfLearn[i] + ".";
         else finalContent += listOfLearn[i] + ", ";
       }
       //finalContent += " You can completely ignore these extra informations if the question is not related to these, and answer like usual."
