@@ -36,10 +36,10 @@ export async function POST(req) {
 
     // Extract the question embedding (the last one)
     const questionEmbedding = embeddings.slice([extraInfo.length, 0], [1]);
-
+    
     const relevantInfo = [];
     const threshold = 0.5; // Set a threshold for determining relevance
-
+    
     // Calculate cosine similarity manually
     function cosineSimilarity(embedding1, embedding2) {
       const dotProduct = tf.dot(tf.squeeze(embedding1), tf.squeeze(embedding2)).dataSync()[0];
@@ -47,7 +47,7 @@ export async function POST(req) {
       const norm2 = tf.norm(tf.squeeze(embedding2)).dataSync()[0];
       return dotProduct / (norm1 * norm2);
     }
-
+    
     // Iterate over each extra info embedding
     for (let i = 0; i < extraInfo.length; i++) {
       const extraEmbedding = embeddings.slice([i, 0], [1]);
